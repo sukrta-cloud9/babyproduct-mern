@@ -1,0 +1,127 @@
+.footer-section {
+    background: linear-gradient(to right, #FEC8D8, #C6E2E9); 
+    color: #3B3B3B;
+    font-family: 'Quicksand', sans-serif;
+    padding: 30px 0;
+  }
+  
+  
+  .footer-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #3B3B3B;
+  }
+  
+  
+  .footer-top i {
+    color: #3B3B3B;
+    transition: transform 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .footer-top i:hover {
+    color: #ff7b9c;
+    transform: scale(1.2);
+  }
+  
+  
+  .newsletter-form input {
+    border-radius: 30px;
+    border: none;
+    padding: 10px 15px;
+    width: 220px;
+    margin-right: 10px;
+    outline: none;
+  }
+  
+  .pastel-btn-footer {
+    background: linear-gradient(to right, #FEC8D8, #C6E2E9);
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .pastel-btn-footer:hover {
+    background: linear-gradient(to right, #C6E2E9, #FEC8D8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  
+  .footer-bottom {
+    background: linear-gradient(to right, #FEC8D8, #C6E2E9); 
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-size: 0.9rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    text-align: left;
+  }
+  
+  .footer-bottom h5 {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #3B3B3B;
+  }
+  
+  .footer-bottom ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-bottom li {
+    margin-bottom: 5px;
+  }
+  
+  .footer-bottom a {
+    color: #3B3B3B;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-bottom a:hover {
+    color: #ff7b9c;
+  }
+
+
+  .footer1 a
+  {
+    color: palevioletred;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  .footer1 a:hover
+  {
+    color: rgb(48, 15, 47);
+  }
+
+
+  
+  
+  @media (max-width: 768px) {
+    .footer-bottom {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  
+    .newsletter-form input {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    
+  }
+  body, html {
+    margin: 0;
+    padding: 0;
+  }
+  
+  footer {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }

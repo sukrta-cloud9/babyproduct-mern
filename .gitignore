@@ -1,0 +1,8 @@
+.DS_Store
+
+babyproduct-frontend/node_modules/
+babyproduct-frontend/dist/
+babyproduct-frontend/.env
+
+babyproduct-backend/node_modules/
+babyproduct-backend/.env

@@ -1,0 +1,13 @@
+{
+    "services": [
+      {
+        "type": "web",
+        "name": "babyproduct-backend",
+        "env": "node",
+        "plan": "free",
+        "buildCommand": "cd backend && npm install",
+        "startCommand": "cd backend && npm start"
+      }
+    ]
+  }
+  
