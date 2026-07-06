@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from "react";
 
+import React, {createContext,useContext,useState, useEffect,} from "react";
+import { useAuth } from "./AuthContext";
 
 const CartContext = createContext();
 
@@ -7,58 +8,101 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({
     items: [],
   });
+  const { user } = useAuth();
+  const fetchCart = async () => {
+  if (!user) return;
 
-  
-  const addToCart = (product) => {
-    setCart((prev) => {
-      const exists = prev.items.find((item) => item.productId === product.id);
+  try {
+    const res = await fetch(
+      `http://localhost:5000/cart/${user._id}`
+    );
 
-      if (exists) {
-        return {
-          ...prev,
-          items: prev.items.map((item) =>
-            item.productId === product.id
-              ? { ...item, qty: item.qty + 1 }
-              : item
-          ),
-        };
-      }
+    const data = await res.json();
 
-      return {
-        ...prev,
-        items: [
-          ...prev.items,
-          {
-            productId: product.id,
-            name: product.name,
-            price: Number(String(product.price).replace(/₹/g, "")),
-            img: product.img,
-            qty: 1,
-          },
-        ],
-      };
+    const items = data.map((item) => ({
+      productId: item.product._id,
+      cartId: item._id,
+      name: item.product.name,
+      price: item.product.price,
+      img: item.product.image,
+      qty: item.quantity,
+    }));
+
+    setCart({
+      items,
     });
-  };
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+useEffect(() => {
+  if (user) {
+    fetchCart();
+  } else {
+    setCart({ items: [] });
+  }
+}, [user]);
+  
+  const addToCart = async (product) => {
+  if (!user) return;
+
+  try {
+    await fetch("http://localhost:5000/cart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: user._id,
+        productId: product.id,
+      }),
+    });
+
+    // Fetch latest cart from MongoDB
+    await fetchCart();
+
+    
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+      
+  
+  const removeFromCart = async (cartId) => {
+  try {
+    await fetch(`http://localhost:5000/cart/${cartId}`, {
+      method: "DELETE",
+    });
+
+    fetchCart();
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   
-  const removeFromCart = (productId) => {
-    setCart((prev) => ({
-      ...prev,
-      items: prev.items.filter((item) => item.productId !== productId),
-    }));
-  };
+  const updateQty = async (cartId, qty) => {
+  if (qty < 1) return;
 
-  
-  const updateQty = (productId, qty) => {
-    if (qty < 1) return;
+  try {
+    await fetch(`http://localhost:5000/cart/${cartId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        quantity: qty,
+      }),
+    });
 
-    setCart((prev) => ({
-      ...prev,
-      items: prev.items.map((item) =>
-        item.productId === productId ? { ...item, qty } : item
-      ),
-    }));
-  };
+    fetchCart();
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   
   const clearCart = () => {

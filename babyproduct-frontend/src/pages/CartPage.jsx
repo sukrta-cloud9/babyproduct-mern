@@ -1,13 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
+  console.log("=== CartPage Loaded ===");
   const { cart, removeFromCart, updateQty, clearCart, getTotal } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
-  
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      if (!user) return;
+      console.log("Logged in User:", user);
+
+      try {
+        const res = await fetch(`http://localhost:5000/cart/${user._id}`);
+        const data = await res.json();
+
+        console.log("Cart from MongoDB:", data);
+
+        setCartItems(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchCart();
+  }, [user]);
+
+  // This is only for checking that data is coming from MongoDB.
+  console.log("cartItems:", cartItems);
+
   if (!cart || !cart.items) {
     return (
       <div className="container text-center py-5">
@@ -15,8 +42,7 @@ const CartPage = () => {
       </div>
     );
   }
-
-  
+  console.log("Cart from Context:", cart);
   if (cart.items.length === 0) {
     return (
       <div className="container text-center py-5">
@@ -50,12 +76,10 @@ const CartPage = () => {
                 <h5 className="card-title">{item.name}</h5>
                 <p className="price">₹{item.price}</p>
 
-
-                
                 <div className="d-flex justify-content-center align-items-center gap-3 my-3">
                   <button
                     className="like-btn"
-                    onClick={() => updateQty(item.productId, item.qty - 1)}
+                    onClick={() => updateQty(item.cartId, item.qty - 1)}
                     disabled={item.qty === 1}
                   >
                     -
@@ -73,16 +97,15 @@ const CartPage = () => {
 
                   <button
                     className="like-btn"
-                    onClick={() => updateQty(item.productId, item.qty + 1)}
+                    onClick={() => updateQty(item.cartId, item.qty + 1)}
                   >
                     +
                   </button>
                 </div>
 
-                
                 <button
                   className="like-btn"
-                  onClick={() => removeFromCart(item.productId)}
+                  onClick={() => removeFromCart(item.cartId)}
                 >
                   <FaTrash /> Remove
                 </button>
@@ -92,7 +115,6 @@ const CartPage = () => {
         ))}
       </div>
 
-     
       <div className="text-center mt-4">
         <h4>
           Total:{" "}
@@ -101,13 +123,12 @@ const CartPage = () => {
           </span>
         </h4>
 
-        <button className="cart-btn mt-3" onClick={() => navigate("/checkout")}>
+        <button
+          className="cart-btn mt-3"
+          onClick={() => navigate("/checkout")}
+        >
           Proceed to Checkout
         </button>
-
-        <br />
-
-        
       </div>
     </div>
   );

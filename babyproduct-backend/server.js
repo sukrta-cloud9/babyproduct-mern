@@ -2,15 +2,19 @@ const express = require("express");
 const mongoose = require("mongoose");
 const server = express();
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
+const cartRoutes = require("./routes/cartRoutes");
 
 
 server.use(express.json());
 server.use(cors());
 
-mongoose.connect("mongodb+srv://sukrta:mern54321@mern-cluster.zlol5zf.mongodb.net/babyproduct_backend?appName=mern-cluster").then(()=>
+server.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+mongoose.connect(process.env.MONGO_URI).then(()=>
 {
     console.log("MongoDB connected")
 }).catch((err)=>{
@@ -22,6 +26,7 @@ res.send("Home page");
 
 server.use("/products",productRoutes);
 server.use("/users", userRoutes);
+server.use("/cart", cartRoutes);
 
 
 
