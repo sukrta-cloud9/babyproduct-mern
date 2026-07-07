@@ -9,14 +9,14 @@ import "./Products.css";
 const ProductCard = ({ id, name, price, img, rating, offer }) => {
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const { user } = useAuth();
-  const { addToCart } = useCart(); // We will remove this later
+  const { addToCart } = useCart(); 
   const navigate = useNavigate();
 
-  const isInWishlist = user
-    ? wishlist.some((item) => item.id === id)
-    : false;
+  const wishlistItem = wishlist.find((item) => item.id === id);
 
-  // Decide where the image is stored
+  const isInWishlist = !!wishlistItem;
+
+  
   const imageUrl = img.startsWith("/uploads")
     ? `http://localhost:5000${img}`
     : img;
@@ -25,13 +25,13 @@ const ProductCard = ({ id, name, price, img, rating, offer }) => {
     if (!user) return navigate("/login");
 
     if (isInWishlist) {
-      removeFromWishlist(id);
+      removeFromWishlist(wishlistItem.wishlistId);
     } else {
       addToWishlist({ id, name, price, img, rating, offer });
     }
   };
 
-  // Add product to MongoDB Cart
+  
   const handleAddToCart = () => {
   if (!user) return navigate("/login");
 

@@ -1,47 +1,93 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 
 const WishlistContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
-  const { user } = useAuth(); 
+  const { user } = useAuth();
+
   const [wishlist, setWishlist] = useState([]);
 
-  
-  useEffect(() => {
-    if (!user) {
-      setWishlist([]);
-      return;
-    }
+  // Fetch Wishlist
+  const fetchWishlist = async () => {
+    if (!user) return;
 
-    const saved = localStorage.getItem(`wishlist_${user.id}`);
-    setWishlist(saved ? JSON.parse(saved) : []);
-  }, [user]);
+    try {
+      const res = await fetch(
+        `http://localhost:5000/wishlist/${user._id}`
+      );
 
-  
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem(`wishlist_${user.id}`, JSON.stringify(wishlist));
-    }
-  }, [wishlist, user]);
+      const data = await res.json();
 
-  const addToWishlist = (item) => {
-    const exists = wishlist.find((p) => p.id === item.id);
-    if (!exists) {
-      setWishlist([...wishlist, item]);
+      const items = data.map((item) => ({
+        wishlistId: item._id,
+        id: item.product._id,
+        name: item.product.name,
+        price: item.product.price,
+        img: item.product.image,
+        rating: item.product.rating,
+        offer: item.product.offer,
+      }));
+
+      setWishlist(items);
+
+    } catch (err) {
+      console.log(err);
     }
   };
 
-  const removeFromWishlist = (id) => {
-    setWishlist(wishlist.filter((item) => item.id !== id));
+  useEffect(() => {
+    if (user) {
+      fetchWishlist();
+    } else {
+      setWishlist([]);
+    }
+  }, [user]);
+
+  // Add to Wishlist
+  const addToWishlist = async (product) => {
+    if (!user) return;
+
+    try {
+      await fetch("http://localhost:5000/wishlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user._id,
+          productId: product.id,
+        }),
+      });
+
+      fetchWishlist();
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Remove from Wishlist
+  const removeFromWishlist = async (wishlistId) => {
+    try {
+      await fetch(`http://localhost:5000/wishlist/${wishlistId}`, {
+        method: "DELETE",
+      });
+
+      fetchWishlist();
+
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const clearWishlist = () => {
     setWishlist([]);
   };
 
-  
-  const getWishlistCount = () => wishlist.length;
+  const getWishlistCount = () => {
+    return wishlist.length;
+  };
 
   return (
     <WishlistContext.Provider
@@ -50,7 +96,7 @@ export const WishlistProvider = ({ children }) => {
         addToWishlist,
         removeFromWishlist,
         clearWishlist,
-        getWishlistCount, 
+        getWishlistCount,
       }}
     >
       {children}

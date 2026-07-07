@@ -7,12 +7,13 @@ require("dotenv").config();
 const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
 const cartRoutes = require("./routes/cartRoutes");
-
+const wishlistRoutes = require("./routes/wishlistRoutes");
 
 server.use(express.json());
 server.use(cors());
 
 server.use("/uploads", express.static(path.join(__dirname, "uploads")));
+server.use("/wishlist", wishlistRoutes);
 
 mongoose.connect(process.env.MONGO_URI).then(()=>
 {

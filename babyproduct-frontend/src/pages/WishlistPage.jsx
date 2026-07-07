@@ -12,7 +12,7 @@ const WishlistPage = () => {
   const handleAddToCart = (product) => {
     addToCart(product, 1);
 
-    removeFromWishlist(product.id);
+    removeFromWishlist(product.wishlistId);
 
     
   };
@@ -63,7 +63,7 @@ const WishlistPage = () => {
                   
                   <button
                     className="like-btn"
-                    onClick={() => removeFromWishlist(item.id)}
+                    onClick={() => removeFromWishlist(item.wishlistId)}
                   >
                     <FaTrash /> Remove
                   </button>
