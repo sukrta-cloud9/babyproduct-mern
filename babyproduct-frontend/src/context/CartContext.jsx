@@ -59,7 +59,7 @@ useEffect(() => {
       }),
     });
 
-    // Fetch latest cart from MongoDB
+    
     await fetchCart();
 
     

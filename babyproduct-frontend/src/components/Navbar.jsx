@@ -95,7 +95,7 @@ export default function Navbar() {
               </Link>
             </li>
 
-            {/* CART */}
+            
             <li className="nav-item position-relative">
               <Link className="nav-link fw-semibold" to="/cart">
                 <i
@@ -124,7 +124,7 @@ export default function Navbar() {
               </Link>
             </li>
 
-            {/* WISHLIST  */}
+            
             <li className="nav-item position-relative">
               <Link className="nav-link fw-semibold" to="/wishlist">
                 <i
@@ -153,7 +153,7 @@ export default function Navbar() {
               </Link>
             </li>
 
-            {/* LOGIN */}
+            
             {!user && (
               <li className="nav-item">
                 <Link className="nav-link fw-semibold" to="/login">
@@ -168,7 +168,7 @@ export default function Navbar() {
                 </Link>
               </li>
             )}
-            {/* USER  */}
+            
             {user && user.role === "user" && (
               <li className="nav-item">
                 <Link className="nav-link fw-semibold" to="/profile">
@@ -184,7 +184,7 @@ export default function Navbar() {
               </li>
             )}
 
-            {/* ADMIN */}
+            
             {user && user.role === "admin" && (
               <li className="nav-item">
                 <Link className="nav-link fw-semibold" to="/admin">
@@ -200,7 +200,7 @@ export default function Navbar() {
               </li>
             )}
 
-            {/* LOGOUT */}
+            
             {user && (
               <li className="nav-item">
                 <button

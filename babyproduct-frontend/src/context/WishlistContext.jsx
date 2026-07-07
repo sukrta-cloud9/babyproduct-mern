@@ -8,7 +8,7 @@ export const WishlistProvider = ({ children }) => {
 
   const [wishlist, setWishlist] = useState([]);
 
-  // Fetch Wishlist
+  
   const fetchWishlist = async () => {
     if (!user) return;
 
@@ -44,7 +44,7 @@ export const WishlistProvider = ({ children }) => {
     }
   }, [user]);
 
-  // Add to Wishlist
+  
   const addToWishlist = async (product) => {
     if (!user) return;
 
@@ -67,7 +67,7 @@ export const WishlistProvider = ({ children }) => {
     }
   };
 
-  // Remove from Wishlist
+  
   const removeFromWishlist = async (wishlistId) => {
     try {
       await fetch(`http://localhost:5000/wishlist/${wishlistId}`, {

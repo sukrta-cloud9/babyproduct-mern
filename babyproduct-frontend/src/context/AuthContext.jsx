@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // LOGIN
+  
   const login = async (email, password) => {
     console.log("Trying login with:", email, password);
     try {
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // REGISTER
+  
   const register = async ({ name, email, password }) => {
     try {
       const res = await fetch("http://localhost:5000/users/register", {
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // LOGOUT
+  
   const logout = () => {
     setUser(null);
 
