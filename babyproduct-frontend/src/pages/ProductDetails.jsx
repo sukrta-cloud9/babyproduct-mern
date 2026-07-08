@@ -24,19 +24,24 @@ export default function ProductDetails() {
 
   if (!product) return <h2 className="text-center mt-5">Loading...</h2>;
 
-  const isInWishlist = user
-    ? wishlist.some((item) => item.id === product.id)
-    : false;
+  // Find the wishlist item for this product
+  const wishlistItem = wishlist.find((item) => item.id === product._id);
+
+  const isInWishlist = !!wishlistItem;
 
   const handleWishlist = () => {
     if (!user) return navigate("/login");
 
     if (isInWishlist) {
-      removeFromWishlist(product.id);
+      removeFromWishlist(wishlistItem.wishlistId);
     } else {
       addToWishlist({
-        ...product,
-        img: product.image || product.img, 
+        id: product._id,
+        name: product.name,
+        price: product.price,
+        img: product.image,
+        rating: product.rating,
+        offer: product.offer,
       });
     }
   };
@@ -45,9 +50,12 @@ export default function ProductDetails() {
     if (!user) return navigate("/login");
 
     addToCart({
-      ...product,
-      quantity: 1,
-      img: product.image || product.img, 
+      id: product._id,
+      name: product.name,
+      price: product.price,
+      img: product.image,
+      rating: product.rating,
+      offer: product.offer,
     });
   };
 
@@ -55,7 +63,6 @@ export default function ProductDetails() {
     <div className="container py-5">
       <div className="row align-items-center">
 
-       
         <div className="col-md-6 text-center">
           <img
             src={product.image || product.img}
@@ -69,7 +76,6 @@ export default function ProductDetails() {
           />
         </div>
 
-        
         <div className="col-md-6">
           <h2 className="mb-3">{product.name}</h2>
 
@@ -86,7 +92,6 @@ export default function ProductDetails() {
 
           <p className="mb-4">{product.description}</p>
 
-          
           <div className="actions d-flex gap-3">
             <button className="like-btn" onClick={handleWishlist}>
               <FaHeart color={isInWishlist ? "red" : "#f27777"} /> Wishlist
