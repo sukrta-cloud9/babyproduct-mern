@@ -18,7 +18,7 @@ const ProductCard = ({ id, name, price, img, rating, offer }) => {
 
   
   const imageUrl = img.startsWith("/uploads")
-    ? `http://localhost:5000${img}`
+    ? `${import.meta.env.VITE_API_URL}${img}`
     : img;
 
   const handleWishlist = () => {

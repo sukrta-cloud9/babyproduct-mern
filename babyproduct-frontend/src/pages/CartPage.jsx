@@ -20,7 +20,7 @@ const CartPage = () => {
       console.log("Logged in User:", user);
 
       try {
-        const res = await fetch(`http://localhost:5000/cart/${user._id}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/cart/${user._id}`);
         const data = await res.json();
 
         console.log("Cart from MongoDB:", data);
@@ -68,7 +68,7 @@ const CartPage = () => {
       <div className="row">
         {cart.items.map((item) => {
           const imageUrl = item.img.startsWith("/uploads")
-            ? `http://localhost:5000${item.img}`
+            ? `${import.meta.env.VITE_API_URL}${item.img}`
             : item.img;
 
           return (

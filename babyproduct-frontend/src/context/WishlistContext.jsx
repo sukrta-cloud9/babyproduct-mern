@@ -14,7 +14,7 @@ export const WishlistProvider = ({ children }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/wishlist/${user._id}`
+        `${import.meta.env.VITE_API_URL}/wishlist/${user._id}`
       );
 
       const data = await res.json();
@@ -49,7 +49,7 @@ export const WishlistProvider = ({ children }) => {
     if (!user) return;
 
     try {
-      await fetch("http://localhost:5000/wishlist", {
+      await fetch(`${import.meta.env.VITE_API_URL}/wishlist`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +70,7 @@ export const WishlistProvider = ({ children }) => {
   
   const removeFromWishlist = async (wishlistId) => {
     try {
-      await fetch(`http://localhost:5000/wishlist/${wishlistId}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/wishlist/${wishlistId}`, {
         method: "DELETE",
       });
 

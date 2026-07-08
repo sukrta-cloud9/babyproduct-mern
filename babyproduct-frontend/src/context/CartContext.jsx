@@ -14,7 +14,7 @@ export const CartProvider = ({ children }) => {
 
   try {
     const res = await fetch(
-      `http://localhost:5000/cart/${user._id}`
+      `${import.meta.env.VITE_API_URL}/cart/${user._id}`
     );
 
     const data = await res.json();
@@ -48,7 +48,7 @@ useEffect(() => {
   if (!user) return;
 
   try {
-    await fetch("http://localhost:5000/cart", {
+    await fetch(`${import.meta.env.VITE_API_URL}/cart`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +73,7 @@ useEffect(() => {
   
   const removeFromCart = async (cartId) => {
   try {
-    await fetch(`http://localhost:5000/cart/${cartId}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/cart/${cartId}`, {
       method: "DELETE",
     });
 
@@ -88,7 +88,7 @@ useEffect(() => {
   if (qty < 1) return;
 
   try {
-    await fetch(`http://localhost:5000/cart/${cartId}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/cart/${cartId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

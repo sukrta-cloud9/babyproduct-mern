@@ -36,7 +36,7 @@ const WishlistPage = () => {
       <div className="row">
         {wishlist.map((item) => {
           const imageUrl = item.img.startsWith("/uploads")
-            ? `http://localhost:5000${item.img}`
+            ? `${import.meta.env.VITE_API_URL}${item.img}`
             : item.img;
 
           return (

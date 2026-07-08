@@ -4,13 +4,13 @@ export default function UsersTable() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/users")
+    fetch(`${import.meta.env.VITE_API_URL}/users`)
       .then(res => res.json())
       .then(data => setUsers(data));
   }, []);
 
   const toggleUserStatus = async (id, currentStatus) => {
-    await fetch(`http://localhost:5000/users/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/users/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ active: !currentStatus }),
