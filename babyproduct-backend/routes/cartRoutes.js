@@ -3,9 +3,16 @@ const router = express.Router();
 
 const Cart = require("../models/cartSchema");
 
+// ================= ADD TO CART =================
 router.post("/", async (req, res) => {
   try {
     const { userId, productId } = req.body;
+
+    if (!userId || !productId) {
+      return res.status(400).json({
+        message: "userId and productId are required",
+      });
+    }
 
     const existingItem = await Cart.findOne({
       user: userId,
@@ -28,50 +35,80 @@ router.post("/", async (req, res) => {
 
     const savedCartItem = await newCartItem.save();
 
-    res.json(savedCartItem);
+    return res.json(savedCartItem);
 
   } catch (err) {
-    console.log(err);
+    console.error("POST /cart:", err);
+
+    return res.status(500).json({
+      message: err.message,
+    });
   }
 });
 
+// ================= GET CART =================
 router.get("/:userId", async (req, res) => {
   try {
-
     const cartItems = await Cart.find({
       user: req.params.userId,
     }).populate("product");
 
-    res.json(cartItems);
+    return res.json(cartItems);
 
   } catch (err) {
-    console.log(err);
+    console.error("GET /cart:", err);
+
+    return res.status(500).json({
+      message: err.message,
+    });
   }
 });
+
+// ================= UPDATE QUANTITY =================
 router.patch("/:id", async (req, res) => {
   try {
-
     const cartItem = await Cart.findById(req.params.id);
+
+    if (!cartItem) {
+      return res.status(404).json({
+        message: "Cart item not found",
+      });
+    }
 
     cartItem.quantity = req.body.quantity;
 
     const updatedItem = await cartItem.save();
 
-    res.json(updatedItem);
+    return res.json(updatedItem);
 
   } catch (err) {
-    console.log(err);
+    console.error("PATCH /cart:", err);
+
+    return res.status(500).json({
+      message: err.message,
+    });
   }
 });
+
+// ================= DELETE ITEM =================
 router.delete("/:id", async (req, res) => {
   try {
-
     const deletedItem = await Cart.findByIdAndDelete(req.params.id);
 
-    res.json(deletedItem);
+    if (!deletedItem) {
+      return res.status(404).json({
+        message: "Cart item not found",
+      });
+    }
+
+    return res.json(deletedItem);
 
   } catch (err) {
-    console.log(err);
+    console.error("DELETE /cart:", err);
+
+    return res.status(500).json({
+      message: err.message,
+    });
   }
 });
 

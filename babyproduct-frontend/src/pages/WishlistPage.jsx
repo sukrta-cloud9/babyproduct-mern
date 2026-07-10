@@ -9,9 +9,16 @@ const WishlistPage = () => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
-  const handleAddToCart = (product) => {
-    addToCart(product);
+  const handleAddToCart = async(product) => {
+    try
+    {
+      await addToCart(product);
     removeFromWishlist(product.wishlistId);
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
   };
 
   if (!wishlist || wishlist.length === 0) {

@@ -1,40 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/AuthContext";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
-  console.log("=== CartPage Loaded ===");
-
   const { cart, removeFromCart, updateQty, getTotal } = useCart();
-  const { user } = useAuth();
+
   const navigate = useNavigate();
-
-  const [cartItems, setCartItems] = useState([]);
-
-  useEffect(() => {
-    const fetchCart = async () => {
-      if (!user) return;
-
-      console.log("Logged in User:", user);
-
-      try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/cart/${user._id}`);
-        const data = await res.json();
-
-        console.log("Cart from MongoDB:", data);
-
-        setCartItems(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchCart();
-  }, [user]);
-
-  console.log("cartItems:", cartItems);
 
   if (!cart || !cart.items) {
     return (
@@ -67,12 +39,13 @@ const CartPage = () => {
 
       <div className="row">
         {cart.items.map((item) => {
-          const imageUrl = item.img.startsWith("/uploads")
-            ? `${import.meta.env.VITE_API_URL}${item.img}`
-            : item.img;
+          const imageUrl =
+            item.img && item.img.startsWith("/uploads")
+              ? `${import.meta.env.VITE_API_URL}${item.img}`
+              : item.img;
 
           return (
-            <div key={item.productId} className="col-md-3 mb-4">
+            <div key={item.cartId} className="col-md-3 mb-4">
               <div className="card shadow-sm p-2 wishlist-card">
                 <img
                   src={imageUrl}
@@ -92,10 +65,10 @@ const CartPage = () => {
                   <div className="d-flex justify-content-center align-items-center gap-3 my-3">
                     <button
                       className="like-btn"
+                      disabled={item.qty === 1}
                       onClick={() =>
                         updateQty(item.cartId, item.qty - 1)
                       }
-                      disabled={item.qty === 1}
                     >
                       -
                     </button>
@@ -118,6 +91,7 @@ const CartPage = () => {
                     >
                       +
                     </button>
+
                   </div>
 
                   <button
@@ -135,14 +109,14 @@ const CartPage = () => {
 
       <div className="text-center mt-4">
         <h4>
-          Total:{" "}
+          Total:
           <span
             style={{
               color: "#f27777",
               fontWeight: "700",
             }}
           >
-            ₹{getTotal()}
+            {" "}₹{getTotal()}
           </span>
         </h4>
 
