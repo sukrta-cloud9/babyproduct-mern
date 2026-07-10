@@ -24,7 +24,7 @@ export default function ProductDetails() {
 
   if (!product) return <h2 className="text-center mt-5">Loading...</h2>;
 
-  // Find the wishlist item for this product
+  
   const wishlistItem = wishlist.find((item) => item.id === product._id);
 
   const isInWishlist = !!wishlistItem;
@@ -58,6 +58,10 @@ export default function ProductDetails() {
       offer: product.offer,
     });
   };
+  const imageUrl =
+  product.image?.startsWith("/uploads")
+    ? `${import.meta.env.VITE_API_URL}${product.image}`
+    : product.image || product.img;
 
   return (
     <div className="container py-5">
@@ -65,15 +69,15 @@ export default function ProductDetails() {
 
         <div className="col-md-6 text-center">
           <img
-            src={product.image || product.img}
-            alt={product.name}
-            style={{
-              width: "100%",
-              maxHeight: "450px",
-              objectFit: "cover",
-              borderRadius: "15px",
-            }}
-          />
+  src={imageUrl}
+  alt={product.name}
+  style={{
+    width: "100%",
+    maxHeight: "450px",
+    objectFit: "cover",
+    borderRadius: "15px",
+  }}
+/>
         </div>
 
         <div className="col-md-6">
